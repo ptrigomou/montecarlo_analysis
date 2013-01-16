@@ -1,5 +1,5 @@
 """
-montecarlo_grapher.py (v4)
+montecarlo_grapher.py (v5)
 PTM -- 16.01.13
 Makes graphics of Montecarlo RDC bootstrapping
 usage: python montecarlo_grapher.py outname
@@ -19,7 +19,9 @@ qang = loadtxt("Qang.tbl")
 popo = loadtxt("pop1.tbl")
 beta = loadtxt("gAng.tbl")
 gdom = loadtxt("gdo.tbl")
-bnum = (len(qang) / 4)
+# defining the number of bins. Can be changed manually to a fixed number
+#bnum = (len(qang) / 4)
+bnum = 25
 #rmsd = loadtxt("bkr_1.txt")
 #tit=loadtxt("title.txt",dtype='string')
 
@@ -55,18 +57,19 @@ n, bins, patches = plt.hist(hist, bnum, normed=False, facecolor='blue', alpha=0.
 bincenters = 0.5*(bins[1:]+bins[:-1])
 # best fit line for the normal Probability Density Function (PDF). Normalized to the experimental PDF maximum.
 mu = sp.mean(hist)
-# defined as unbiased estimator of the parent distribution
-sigma = sp.sqrt(sp.var(hist, ddof=1))
+# defined as unbiased estimator of the parent distribution. Now biased.
+sigma = sp.sqrt(sp.var(hist, ddof=0))
 y = mlab.normpdf(bincenters, mu, sigma)
 y = Normalize(y,n)
 l = plt.plot(bincenters, y, 'r--', linewidth=2)
 plt.xlabel(r'$\mathrm{Q_{ang}}$')
 plt.ylabel('Frequency')
 #define label
-titelin ='$\mathrm{Histogram\ of\ Q_{ang}}\ \mu=$'+str(round(mu,2))+'$\ \sigma=$'+str(round(sigma,2))
+nelem = (len(hist)-1)
+titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(round(mu,2))+'$\ \sigma=$'+str(round(sigma,2))
 plt.title(titelin)
-#plt.xlim(40, 160)
-#plt.ylim(0, 50)
+plt.xlim(0.0, 1.0)
+plt.ylim(0, 50)
 plt.grid(True)
 
 
@@ -86,10 +89,12 @@ y = Normalize(y,n)
 l = plt.plot(bincenters, y, 'r--', linewidth=2)
 plt.xlabel(r'$\mathrm{p_{(1)}}$')
 plt.ylabel('Frequency')
-titelin ='$\mathrm{Histogram\ of\ p_{(1)}}\ \mu=$'+str(round(mu,2))+'$\ \sigma=$'+str(round(sigma,2))
+#define label
+nelem = (len(hist)-1)
+titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(round(mu,2))+'$\ \sigma=$'+str(round(sigma,2))
 plt.title(titelin)
-#plt.xlim(40, 160)
-#plt.ylim(0, 50)
+plt.xlim(0.0, 1.0)
+plt.ylim(0, 50)
 plt.grid(True)
 
 
@@ -109,10 +114,12 @@ y = Normalize(y,n)
 l = plt.plot(bincenters, y, 'r--', linewidth=2)
 plt.xlabel(r'$\mathrm{\beta}$')
 plt.ylabel('Frequency')
-titelin ='$\mathrm{Histogram\ of\ Beta\ angle}\ \mu=$'+str(round(mu,2))+'$\ \sigma=$'+str(round(sigma,2))
+#define label
+nelem = (len(hist)-1)
+titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(round(mu,2))+'$\ \sigma=$'+str(round(sigma,2))
 plt.title(titelin)
-#plt.xlim(40, 160)
-#plt.ylim(0, 50)
+plt.xlim(-10, 160)
+plt.ylim(0, 50)
 plt.grid(True)
 
 
@@ -132,10 +139,12 @@ y = Normalize(y,n)
 l = plt.plot(bincenters, y, 'r--', linewidth=2)
 plt.xlabel(r'$\mathrm{GDO \cdot 10^6}$')
 plt.ylabel('Frequency')
-titelin ='$\mathrm{Histogram\ of\ Q_{ang}}\ \mu=$'+str(round(mu,2))+'$\ \sigma=$'+str(round(sigma,2))
+#define label
+nelem = (len(hist)-1)
+titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(round(mu,2))+'$\ \sigma=$'+str(round(sigma,2))
 plt.title(titelin)
-#plt.xlim(40, 160)
-#plt.ylim(0, 50)
+plt.xlim(1000, 6000)
+plt.ylim(0, 50)
 plt.grid(True)
 
 
@@ -159,11 +168,12 @@ fit = np.polyfit(popo,qang,1)
 fit_y = poly1d(fit)
 # setting up the scatter plot
 plt.plot(popo, qang, 'bo', popo, fit_y(popo), '-r',linewidth=2)
-plt.title(r'$\mathrm{p_{(1)} vs. Q_{ang}}$')
+#plt.title(r'$\mathrm{p_{(1)} vs. Q_{ang}}$')
 plt.xlabel(r'$\mathrm{p_{(1)}}$')
 plt.ylabel(r'$\mathrm{Q_{ang}}$')
-#plt.xlim(0,80)
-#plt.ylim(0,10)
+# define the graph window
+plt.xlim(0.0,1.0)
+plt.ylim(0.0,1.0)
 
 
 subplot(2,2,2).xaxis.set_major_locator(MaxNLocator(5))
@@ -173,11 +183,11 @@ fit = np.polyfit(popo,beta,1)
 fit_y = poly1d(fit)
 # setting up the scatter plot
 plt.plot(popo, beta, 'bo', popo, fit_y(popo), '-r',linewidth=2)
-plt.title(r'$\mathrm{p_{(1)} vs. \beta}$')
+#plt.title(r'$\mathrm{p_{(1)} vs. \beta}$')
 plt.xlabel(r'$\mathrm{p_{(1)}}$')
 plt.ylabel(r'$\mathrm{\beta}$')
-#plt.xlim(0,80)
-#plt.ylim(0,10)
+plt.xlim(0.0,1.0)
+plt.ylim(-10,160)
 
 
 subplot(2,2,3).xaxis.set_major_locator(MaxNLocator(5))
@@ -187,11 +197,11 @@ fit = np.polyfit(popo,gdom,1)
 fit_y = poly1d(fit)
 # setting up the scatter plot
 plt.plot(popo, gdom, 'bo', popo, fit_y(popo), '-r',linewidth=2)
-plt.title(r'$\mathrm{p_{(1)} vs. GDO \cdot 10^6}$')
+#plt.title(r'$\mathrm{p_{(1)} vs. GDO \cdot 10^6}$')
 plt.xlabel(r'$\mathrm{p_{(1)}}$')
 plt.ylabel(r'$\mathrm{GDO \cdot 10^6}$')
-#plt.xlim(0,80)
-#plt.ylim(0,10)
+plt.xlim(0.0,1.0)
+plt.ylim(1000,6000)
 
 
 subplot(2,2,4).xaxis.set_major_locator(MaxNLocator(5))
@@ -201,11 +211,11 @@ fit = np.polyfit(qang,beta,1)
 fit_y = poly1d(fit)
 # setting up the scatter plot
 plt.plot(qang, beta, 'bo', qang, fit_y(qang), '-r',linewidth=2)
-plt.title(r'$\mathrm{Q_{ang} vs. \beta}$')
+#plt.title(r'$\mathrm{Q_{ang} vs. \beta}$')
 plt.xlabel(r'$\mathrm{Q_{ang}}$')
 plt.ylabel(r'$\mathrm{\beta}$')
-#plt.xlim(0,80)
-#plt.ylim(0,10)
+plt.xlim(0.0,1.0)
+plt.ylim(-10,160)
 
 
 #plt.show()
