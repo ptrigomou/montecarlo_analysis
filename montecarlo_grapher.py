@@ -11,8 +11,6 @@ import matplotlib as mpl
 import matplotlib.mlab as mlab
 from matplotlib import pyplot as plt
 from numpy.lib.function_base import linspace
-import matplotlib.ticker as tkr
-import matplotlib.axis as axs
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.pyplot import colorbar
 import sys
