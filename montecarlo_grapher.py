@@ -1,8 +1,8 @@
 """
-montecarlo_grapher.py (v6)
+montecarlo_grapher.py
 PTM -- 16.01.13
 Makes graphics of Montecarlo RDC bootstrapping
-usage: python montecarlo_grapher.py outname /FolderPath/
+usage: python montecarlo_grapher.py outname /InputPath/ /OutPath/
 """
 from pylab import *
 import numpy as np
@@ -33,31 +33,35 @@ else :
     exit()
 
 if sys.argv[2]:
-    upath = str(sys.argv[2])
+    ipath = str(sys.argv[2])
 else :
     exit()
 
+if sys.argv[3]:
+    opath = str(sys.argv[3])
+    
 
-qang = loadtxt(upath+"Qang.tbl")
-popo = loadtxt(upath+"pop1.tbl")
-beta = loadtxt(upath+"gAng.tbl")
-gdom = loadtxt(upath+"gdo.tbl")
+
+qang = loadtxt(ipath+"Qang.tbl")
+popo = loadtxt(ipath+"pop1.tbl")
+beta = loadtxt(ipath+"gAng.tbl")
+gdom = loadtxt(ipath+"gdo.tbl")
 # defining the number of bins. Can be changed manually to a fixed number
 #bnum = (len(qang) / 4)
 bnum = 25
-#rmsd = loadtxt("bkr_1.txt")
-#tit=loadtxt("title.txt",dtype='string')
+#rmsd = loadtxt(ipath+"bkr_1.txt")
+#tit=loadtxt(ipath+"title.txt",dtype='string')
 
 
 
 #count=0
-output = upath + outname + '_statgraphs.pdf'
+output = opath + outname + '_histogram.pdf'
 pdf = PdfPages(output)
 rc('axes',linewidth=2) 
-figure(figsize=(10,12)).subplots_adjust(left=0.08,bottom=0.08,right=0.96,top=0.95,wspace=0.22,hspace=0.40)
+figure(figsize=(10,6)).subplots_adjust(left=0.08,bottom=0.08,right=0.98,top=0.95,wspace=0.22,hspace=0.40)
 
-subplot(4,2,1).xaxis.set_major_locator(MaxNLocator(5))
-subplot(4,2,1).yaxis.set_major_locator(MaxNLocator(4))
+subplot(2,2,1).xaxis.set_major_locator(MaxNLocator(5))
+subplot(2,2,1).yaxis.set_major_locator(MaxNLocator(4))
 # histogram definition. Normalized ie. the integral over the hist area is 1.
 hist = qang
 n, bins, patches = plt.hist(hist, bnum, normed=False, facecolor='blue', alpha=0.75, histtype='stepfilled')
@@ -73,16 +77,16 @@ l = plt.plot(bincenters, y, 'r--', linewidth=2)
 plt.xlabel(r'$\mathrm{Q_{ang}}$')
 plt.ylabel('Frequency')
 #define label
-nelem = (len(hist)-1)
-titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(round(mu,2))+'$\ \sigma=$'+str(round(sigma,2))
+nelem = len(hist)
+titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(round(mu,3))+'$\ \sigma=$'+str(round(sigma,3))
 plt.title(titelin, fontsize=10)
 plt.xlim(0.0, 1.0)
 plt.ylim(0, 50)
 plt.grid(True)
 
 
-subplot(4,2,2).xaxis.set_major_locator(MaxNLocator(5))
-subplot(4,2,2).yaxis.set_major_locator(MaxNLocator(4))
+subplot(2,2,2).xaxis.set_major_locator(MaxNLocator(5))
+subplot(2,2,2).yaxis.set_major_locator(MaxNLocator(4))
 # histogram definition. Normalized ie. the integral over the hist area is 1.
 hist = popo
 n, bins, patches = plt.hist(hist, bnum, normed=False, facecolor='blue', alpha=0.75, histtype='stepfilled')
@@ -98,7 +102,7 @@ l = plt.plot(bincenters, y, 'r--', linewidth=2)
 plt.xlabel(r'$\mathrm{p_{(1)}}$')
 plt.ylabel('Frequency')
 #define label
-nelem = (len(hist)-1)
+nelem = len(hist)
 titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(round(mu,2))+'$\ \sigma=$'+str(round(sigma,2))
 plt.title(titelin, fontsize=10)
 plt.xlim(0.0, 1.0)
@@ -106,8 +110,8 @@ plt.ylim(0, 50)
 plt.grid(True)
 
 
-subplot(4,2,3).xaxis.set_major_locator(MaxNLocator(5))
-subplot(4,2,3).yaxis.set_major_locator(MaxNLocator(4))
+subplot(2,2,3).xaxis.set_major_locator(MaxNLocator(5))
+subplot(2,2,3).yaxis.set_major_locator(MaxNLocator(4))
 # histogram definition
 hist = beta
 n, bins, patches = plt.hist(hist, bnum, normed=False, facecolor='blue', alpha=0.75, histtype='stepfilled')
@@ -123,16 +127,16 @@ l = plt.plot(bincenters, y, 'r--', linewidth=2)
 plt.xlabel(r'$\mathrm{\beta}$')
 plt.ylabel('Frequency')
 #define label
-nelem = (len(hist)-1)
-titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(round(mu,2))+'$\ \sigma=$'+str(round(sigma,2))
+nelem = len(hist)
+titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(int(mu))+'$\ \sigma=$'+str(int(sigma))
 plt.title(titelin, fontsize=10)
 plt.xlim(-10, 160)
 plt.ylim(0, 50)
 plt.grid(True)
 
 
-subplot(4,2,4).xaxis.set_major_locator(MaxNLocator(5))
-subplot(4,2,4).yaxis.set_major_locator(MaxNLocator(4))
+subplot(2,2,4).xaxis.set_major_locator(MaxNLocator(5))
+subplot(2,2,4).yaxis.set_major_locator(MaxNLocator(4))
 # histogram definition
 hist = gdom
 n, bins, patches = plt.hist(hist, bnum, normed=False, facecolor='blue', alpha=0.75, histtype='stepfilled')
@@ -148,18 +152,25 @@ l = plt.plot(bincenters, y, 'r--', linewidth=2)
 plt.xlabel(r'$\mathrm{GDO \cdot 10^6}$')
 plt.ylabel('Frequency')
 #define label
-nelem = (len(hist)-1)
-titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(round(mu,2))+'$\ \sigma=$'+str(round(sigma,2))
+nelem = len(hist)
+titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(int(mu))+'$\ \sigma=$'+str(int(sigma))
 plt.title(titelin, fontsize=10)
 plt.xlim(1000, 6000)
 plt.ylim(0, 50)
 plt.grid(True)
 
+#plt.show()
+pdf.savefig()
+close()
+pdf.close()
 
+output = opath + outname + '_scatter.pdf'
+pdf = PdfPages(output)
+rc('axes',linewidth=2) 
+figure(figsize=(10,6)).subplots_adjust(left=0.08,bottom=0.08,right=0.98,top=0.95,wspace=0.22,hspace=0.40)
 
-
-subplot(4,2,5).xaxis.set_major_locator(MaxNLocator(5))
-subplot(4,2,5).yaxis.set_major_locator(MaxNLocator(4))
+subplot(2,2,1).xaxis.set_major_locator(MaxNLocator(5))
+subplot(2,2,1).yaxis.set_major_locator(MaxNLocator(4))
 #linear regression
 fit = np.polyfit(popo,qang,1)
 fit_y = poly1d(fit)
@@ -173,8 +184,8 @@ plt.xlim(0.0,1.0)
 plt.ylim(0.0,1.0)
 
 
-subplot(4,2,6).xaxis.set_major_locator(MaxNLocator(5))
-subplot(4,2,6).yaxis.set_major_locator(MaxNLocator(4))
+subplot(2,2,2).xaxis.set_major_locator(MaxNLocator(5))
+subplot(2,2,2).yaxis.set_major_locator(MaxNLocator(4))
 #linear regression
 fit = np.polyfit(popo,beta,1)
 fit_y = poly1d(fit)
@@ -187,8 +198,8 @@ plt.xlim(0.0,1.0)
 plt.ylim(-10,160)
 
 
-subplot(4,2,7).xaxis.set_major_locator(MaxNLocator(5))
-subplot(4,2,7).yaxis.set_major_locator(MaxNLocator(4))
+subplot(2,2,3).xaxis.set_major_locator(MaxNLocator(5))
+subplot(2,2,3).yaxis.set_major_locator(MaxNLocator(4))
 #linear regression
 fit = np.polyfit(popo,gdom,1)
 fit_y = poly1d(fit)
@@ -201,8 +212,8 @@ plt.xlim(0.0,1.0)
 plt.ylim(1000,6000)
 
 
-subplot(4,2,8).xaxis.set_major_locator(MaxNLocator(5))
-subplot(4,2,8).yaxis.set_major_locator(MaxNLocator(4))
+subplot(2,2,4).xaxis.set_major_locator(MaxNLocator(5))
+subplot(2,2,4).yaxis.set_major_locator(MaxNLocator(4))
 #linear regression
 fit = np.polyfit(qang,beta,1)
 fit_y = poly1d(fit)
