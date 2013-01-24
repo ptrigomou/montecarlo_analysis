@@ -54,7 +54,7 @@ bnum = 25
 
 
 #count=0
-output = opath + outname + '_statgraphs.pdf'
+output = opath + outname + '.pdf'
 pdf = PdfPages(output)
 rc('axes',linewidth=2) 
 figure(figsize=(10,12)).subplots_adjust(left=0.08,bottom=0.08,right=0.96,top=0.95,wspace=0.22,hspace=0.40)
@@ -68,16 +68,20 @@ n, bins, patches = plt.hist(hist, bnum, normed=False, facecolor='blue', alpha=0.
 bincenters = 0.5*(bins[1:]+bins[:-1])
 # best fit line for the normal Probability Density Function (PDF). Normalized to the experimental PDF maximum.
 mu = sp.mean(hist)
+me = np.median(hist)
 # defined as unbiased estimator of the parent distribution. Now biased.
 sigma = sp.sqrt(sp.var(hist, ddof=0))
 y = mlab.normpdf(bincenters, mu, sigma)
 y = Normalize(y,n)
 l = plt.plot(bincenters, y, 'r--', linewidth=2)
+z = mlab.normpdf(bincenters, me, sigma)
+z = Normalize(z,n)
+l = plt.plot(bincenters, z, 'g-.', linewidth=2)
 plt.xlabel(r'$\mathrm{Q_{ang}}$')
 plt.ylabel('Frequency')
 #define label
 nelem = len(hist)
-titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(round(mu,3))+'$\ \sigma=$'+str(round(sigma,3))
+titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(round(mu,3))+'$\ \mathrm{\~Q_{ang}=}$'+str(round(me,3))+'$\ \sigma=$'+str(round(sigma,3))
 plt.title(titelin, fontsize=10)
 plt.xlim(0.0, 1.0)
 plt.ylim(0, 50)
@@ -93,16 +97,20 @@ n, bins, patches = plt.hist(hist, bnum, normed=False, facecolor='blue', alpha=0.
 bincenters = 0.5*(bins[1:]+bins[:-1])
 # best fit line for the normal Probability Density Function (PDF). Normalized to the experimental PDF.
 mu = sp.mean(hist)
+me = np.median(hist)
 # defined as unbiased estimator of the parent distribution
 sigma = sp.sqrt(sp.var(hist, ddof=1))
 y = mlab.normpdf(bincenters, mu, sigma)
 y = Normalize(y,n)
 l = plt.plot(bincenters, y, 'r--', linewidth=2)
+z = mlab.normpdf(bincenters, me, sigma)
+z = Normalize(z,n)
+l = plt.plot(bincenters, z, 'g-.', linewidth=2)
 plt.xlabel(r'$\mathrm{p_{(1)}}$')
 plt.ylabel('Frequency')
 #define label
 nelem = len(hist)
-titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(round(mu,2))+'$\ \sigma=$'+str(round(sigma,2))
+titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(round(mu,2))+'$\ \mathrm{\~p_{1}=}$'+str(round(me,2))+'$\ \sigma=$'+str(round(sigma,2))
 plt.title(titelin, fontsize=10)
 plt.xlim(0.0, 1.0)
 plt.ylim(0, 50)
@@ -118,16 +126,20 @@ n, bins, patches = plt.hist(hist, bnum, normed=False, facecolor='blue', alpha=0.
 bincenters = 0.5*(bins[1:]+bins[:-1])
 # best fit line for the normal Probability Density Function (PDF). Normalized to the experimental PDF.
 mu = sp.mean(hist)
+me = np.median(hist)
 # defined as unbiased estimator of the parent distribution
 sigma = sp.sqrt(sp.var(hist, ddof=1))
 y = mlab.normpdf(bincenters, mu, sigma)
 y = Normalize(y,n)
 l = plt.plot(bincenters, y, 'r--', linewidth=2)
+z = mlab.normpdf(bincenters, me, sigma)
+z = Normalize(z,n)
+l = plt.plot(bincenters, z, 'g-.', linewidth=2)
 plt.xlabel(r'$\mathrm{\beta}$')
 plt.ylabel('Frequency')
 #define label
 nelem = len(hist)
-titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(int(mu))+'$\ \sigma=$'+str(int(sigma))
+titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(int(mu))+'$\ \mathrm{\~B=}$'+str(int(me))+'$\ \sigma=$'+str(int(sigma))
 plt.title(titelin, fontsize=10)
 plt.xlim(-10, 160)
 plt.ylim(0, 50)
@@ -143,16 +155,20 @@ n, bins, patches = plt.hist(hist, bnum, normed=False, facecolor='blue', alpha=0.
 bincenters = 0.5*(bins[1:]+bins[:-1])
 # best fit line for the normal Probability Density Function (PDF). Normalized to the experimental PDF.
 mu = sp.mean(hist)
+me = np.median(hist)
 # defined as unbiased estimator of the parent distribution
 sigma = sp.sqrt(sp.var(hist, ddof=1))
 y = mlab.normpdf(bincenters, mu, sigma)
 y = Normalize(y,n)
 l = plt.plot(bincenters, y, 'r--', linewidth=2)
+z = mlab.normpdf(bincenters, me, sigma)
+z = Normalize(z,n)
+l = plt.plot(bincenters, z, 'g-.', linewidth=2)
 plt.xlabel(r'$\mathrm{GDO \cdot 10^6}$')
 plt.ylabel('Frequency')
 #define label
 nelem = len(hist)
-titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(int(mu))+'$\ \sigma=$'+str(int(sigma))
+titelin ='$N=$'+str(nelem)+'$\ \mu=$'+str(int(mu))+'$\ \mathrm{\~{GDO}=}$'+str(int(me))+'$\ \sigma=$'+str(int(sigma))
 plt.title(titelin, fontsize=10)
 plt.xlim(1000, 6000)
 plt.ylim(0, 50)
